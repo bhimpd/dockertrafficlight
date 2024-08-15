@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  red-app:
+    image: trafficlight/red:v1.0
+    networks:
+      - traffic-light
+
+  yellow-app:
+    image: trafficlight/yellow:v1.0
+    networks:
+      - traffic-light
+
+  green-app:
+    image: trafficlight/green:v1.0
+    networks:
+      - traffic-light
+
+  nginx-load-balancer:
+    image: nginx:1.21
+    container_name: nginx-load-balancer
+    ports:
+      - "127.0.1.1:8080:80"
+    volumes:
+      - /home/bhim/nginx/conf.d/:/etc/nginx/conf.d/
+      - /var/log/nginx/:/var/log/nginx/
+    networks:
+      - traffic-light
+
+networks:
+  traffic-light:
+    external: true
